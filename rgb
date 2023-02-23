@@ -1,0 +1,100 @@
+# How to interface RGB LED to Arduino
+
+---
+
+# Introduction
+
+This document explains how to interface an RGB LED to an Arduino, including how to calculate the resistor value, how to configure the pins, and how to write the code.
+
+# RGB LED
+
+RGB LED is an LED with separate Red, Green, Blue LEDs packed together.  It is theoretically possible to get any colors by mixing those basic colors.[[1](https://arduinogetstarted.com/tutorials/arduino-rgb-led)] 
+
+RGB LED has 4 pins: 
+
+- 1 common pin for all LEDs
+    - Common pin can be Anode(+) or Cathode(-) depending on the manufacturer.
+        - if it is Anode, it needs to be connected to the + side of the power supply
+        - if it is Cathode, it needs to be connected to the - side of the power supply
+- 1 pin for RED LED
+- 1 pin for GREEN LED
+- 1 pin for BLUE LED
+
+![RGB LED with common cathode pin[[2](https://www.elecfreaks.com/learn-en/microbitKit/Starter_Kit/starter_kit_case_05.html)]](How%20to%20interface%20RGB%20LED%20to%20Arduino%2076fa6231154a4e4c9d99fc8a4de8fb11/Untitled.png)
+
+RGB LED with common cathode pin[[2](https://www.elecfreaks.com/learn-en/microbitKit/Starter_Kit/starter_kit_case_05.html)]
+
+## How to interface RGB LED to Arduino?
+
+As seen from the image given above, RGB led consists of 3 basic LEDs. It is just driving 3 simple LEDs which require series resistor with each simple LEDs. Resistors limit the current. 
+
+![Arduino together with common cathode RGB LED](How%20to%20interface%20RGB%20LED%20to%20Arduino%2076fa6231154a4e4c9d99fc8a4de8fb11/Untitled%201.png)
+
+Arduino together with common cathode RGB LED
+
+Resistor value can be selected for each LED by using following equation:
+
+<aside>
+💡 $R = \frac{V_{src}-V_{forward}}{I_{current}}$ is the equation for calculating resistor value
+
+$V_{src} :$ 
+ Source Voltage
+
+$V_{forward}$ : LEDs’ voltage drop, can be found from the datasheet
+
+$I_{current}$ : needed current
+
+![example- Extract from the datasheet of [B36S3RGB-F6C0001HOU1930](https://media.digikey.com/pdf/Data%20Sheets/Harvatek%20PDFs/B36S3RGB-F6C0001HOU1930.pdf)](How%20to%20interface%20RGB%20LED%20to%20Arduino%2076fa6231154a4e4c9d99fc8a4de8fb11/Untitled%202.png)
+
+example- Extract from the datasheet of [B36S3RGB-F6C0001HOU1930](https://media.digikey.com/pdf/Data%20Sheets/Harvatek%20PDFs/B36S3RGB-F6C0001HOU1930.pdf)
+
+</aside>
+
+# Coding
+
+3 pins of Arduino are being used for controlling RGB LED. Those pins are output from the Arduino and they should be defined as output within setup()
+
+```arduino
+void setup()
+{
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+}
+```
+
+All pin related configuration should be done within setup().
+
+```arduino
+
+void loop()
+{
+  analogWrite(3, 255);
+  analogWrite(5, 255);
+  analogWrite(6, 102);
+  delay(500);
+}
+```
+
+analogWrite(*pinnumber,* *value*) writes values from 0 to 255 to respective pins. 255 means Fully turned on Red, or Green or Blue, 0 means fully turned off led. By varying value from 0 to 255 it is possible to get shades of the controlled LED.
+
+# Full Code
+
+Here is the tested fully functional code.
+
+```arduino
+void setup()
+{
+  pinMode(3, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+}
+
+void loop()
+{
+  analogWrite(3, 255);
+  analogWrite(5, 255);
+  analogWrite(6, 102);
+  delay(500);
+}
+```
